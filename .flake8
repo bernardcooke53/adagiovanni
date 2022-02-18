@@ -1,0 +1,27 @@
+[flake8]
+exclude =
+    .git,
+    __pycache__,
+    build,
+    dist,
+    Include,
+    include,
+    Lib,
+    lib,
+    Scripts,
+    scripts,
+    *.pyc
+
+per-file-ignores =
+    # Imported but unused
+    */__init__.py: F401
+
+count = True
+max-complexity = 10
+# Personal preference- 80 characters a bit too narrow
+max-line-length = 120
+indent-size = 4
+show-source = True
+output-file = flake8-error-log.txt
+statistics = True
+tee = True

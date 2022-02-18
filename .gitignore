@@ -1,0 +1,15 @@
+/.github/token
+*.vscode*
+/gitleaks-report.json
+/dist
+/build
+**/*__pycache__*
+**/*.egg-info
+/lib
+/scripts
+/include
+pyvenv.cfg
+pip.*
+**/*.mypy_cache
+/flake8-error-log.txt
+*.log
