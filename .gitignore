@@ -13,3 +13,4 @@ pip.*
 **/*.mypy_cache
 /flake8-error-log.txt
 *.log
+.env
