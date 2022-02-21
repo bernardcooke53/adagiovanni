@@ -1,0 +1,29 @@
+version: 1
+disable_existing_loggers: false
+
+level: INFO
+formatters:
+    default:
+        format: |
+            [%(asctime)s.%(msecs)s] %(threadName)s %(name)s (uptime: %(relativeCreated)d ms) %(levelname)s: %(message)s
+        datefmt: "%Y-%m-%d %H:%M:%S"
+    trace:
+        format: |
+            [%(asctime)s.%(msecs)s] %(threadName)s %(name)s %(module)s %(funcName)s line:%(lineno)d (uptime: %(relativeCreated)d ms) %(levelname)s: %(message)s
+        datefmt: "%Y-%m-%d %H:%M:%S"
+handlers:
+    console:
+        class: logging.StreamHandler
+        formatter: default
+        level: INFO
+        stream: ext://sys.stdout
+    file:
+        class: logging.handlers.TimedRotatingFileHandler
+        formatter: default
+        level: INFO
+        filename: data/logs/adagiovanni-main.log
+        when: "H"
+        interval: 4
+        utc: true
+        backupCount: 84 # 2 weeks of logs
+        delay: true # No logs unless there's anything to log

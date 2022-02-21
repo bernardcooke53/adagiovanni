@@ -4,10 +4,17 @@ version = "0.1.0"
 description = "A FastAPI backend for Giovanni to run his sandwich shop"
 authors = ["Bernard Cooke <bernard-cooke@hotmail.com>"]
 
+[tool.poetry.scripts]
+serve = "start_server:serve"
+
 [tool.poetry.dependencies]
 python = "^3.8"
 fastapi = "^0.74.0"
 uvicorn = "^0.17.5"
+PyYAML = "^6.0"
+python-dotenv = "^0.19.2"
+motor = "^2.5.1"
+pymongo = "^3.12.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -17,6 +24,7 @@ black = "^22.1.0"
 safety = "^1.10.3"
 flake8 = "^4.0.1"
 pynvim = "^0.4.3"
+types-PyYAML = "^6.0.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

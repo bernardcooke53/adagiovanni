@@ -1,23 +1,31 @@
 version: "3.8"
 
 services:
-    web:
-        build: .
-        command: uvicorn adagiovanni.main:app --workers 1 --host 0.0.0.0 --port 8000
-        volumes:
-            - ./adagiovanni_appdata/:/usr/app/
-        ports:
-            - 8000:8000
     mongo:
         image: mongo:latest
         environment:
-            MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_USER}
-            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_PASSWORD}
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
         ports:
             - 27017:27017
         volumes:
-            - mongodb_data:/data/db
-
+            - ./mongodb_data:/data/db
+        privileged: true
+    web:
+        build: .
+        command: |
+            uvicorn adagiovanni.main:app
+                --workers 1
+                --host 0.0.0.0
+                --port 8000
+        # TODO: Why doesn't this work in the container?
+        # --log-config=logging_config.yaml
+        volumes:
+            - ./adagiovanni_appdata/:/usr/app/data/
+        ports:
+            - 8000:8000
+        depends_on:
+            - mongo
 volumes:
     mongodb_data:
     adagiovanni_appdata:
