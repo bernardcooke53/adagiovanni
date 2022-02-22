@@ -10,3 +10,13 @@ class Sandwich(str, Enum):
     ChickenAndBacon = "Chicken and Bacon"
     Clubhouse = "Clubhouse"
     EggMayonnaise = "Egg Mayonnaise"
+
+
+# class Sandwich(IdModelMixin, BaseModel):
+#     name: str
+#     friendly_name: str
+#     description: Optional[str] = None
+#
+#
+# class Menu(BaseModel):
+#     sandwiches: List[Sandwich]

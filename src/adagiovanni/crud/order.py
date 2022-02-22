@@ -1,35 +1,43 @@
-import json
-from typing import Dict, List, Optional
+import logging
+from typing import Any, Dict, List, Optional
 
-from bson import json_util
 from bson.objectid import ObjectId
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from adagiovanni.core.config import MONGO_DB, ORDERS_COLLECTION_NAME
+from adagiovanni.core.config import (
+    MAX_DOCUMENT_FETCH_LIMIT,
+    MONGO_DB,
+    ORDERS_COLLECTION_NAME,
+)
 from adagiovanni.models.order import CustomerOrder, OrderInDb
+
+log = logging.getLogger(__name__)
 
 
 async def read_orders(
     client: AsyncIOMotorClient,
     *,
-    filter: Optional[Dict[str, str]] = None,
+    filter: Optional[Dict[str, Any]] = None,
     length: Optional[int] = None,
+    sort: Optional[str] = None
 ) -> List[OrderInDb]:
     cursor = client[MONGO_DB][ORDERS_COLLECTION_NAME].find(filter)
+    if sort:
+        cursor = cursor.sort(sort)
     return [
         OrderInDb(**order)
-        for order in json.loads(json_util.dumps(await cursor.to_list(length=length)))
+        for order in await cursor.to_list(
+            length=min(length or MAX_DOCUMENT_FETCH_LIMIT, MAX_DOCUMENT_FETCH_LIMIT)
+        )
     ]
 
 
 async def place_order(
     client: AsyncIOMotorClient, customer_order: CustomerOrder
 ) -> OrderInDb:
-    # TODO: get latest expected_completion_time from orders,
-    # set order.collection_time, order.expected_completion_time to
-    # max(expected_completion_time) + 2.5, + 3.5 respectively
+    db = client[MONGO_DB]
     order = OrderInDb(**customer_order.dict())
-    doc = await client[MONGO_DB][ORDERS_COLLECTION_NAME].insert_one(order.dict())
+    doc = await db[ORDERS_COLLECTION_NAME].insert_one(order.dict())
     order.id = doc.inserted_id
     order.created_date = ObjectId(order.id).generation_time
     order.updated_date = ObjectId(order.id).generation_time

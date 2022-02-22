@@ -14,6 +14,7 @@ def serve() -> None:
         "adagiovanni.main:app",
         host="0.0.0.0",
         port=8000,
+        factory=True,
         reload=True,
         workers=1,
     )

@@ -1,28 +1,21 @@
-from typing import Any, Dict, List
+from typing import Dict, List
 
 from fastapi import APIRouter
 
 from adagiovanni.crud.order import place_order, read_orders
 from adagiovanni.db import get_client
-from adagiovanni.models.order import CustomerOrder
+from adagiovanni.models.order import CustomerOrder, OrderInDb
 
 router = APIRouter()
 
 
-@router.get("/orders")
-async def get_orders() -> Dict[str, List[Any]]:
+@router.get("/orders", response_model=Dict[str, List[OrderInDb]])
+async def get_orders() -> Dict[str, List[OrderInDb]]:
     client = await get_client()
     return {"orders": await read_orders(client)}
 
 
-@router.post("/order")
-async def post_order(order: CustomerOrder) -> Dict[str, str]:
+@router.post("/order", response_model=OrderInDb)
+async def post_order(order: CustomerOrder) -> OrderInDb:
     client = await get_client()
-    order_in_db = await place_order(client, order)
-
-    return {
-        "message": "Your order has been placed!",
-        "collection_time": "None"
-        if order_in_db.collection_time is None
-        else order_in_db.collection_time.strftime("%Y-%m-%d %H:%M:%S"),
-    }
+    return await place_order(client, order)

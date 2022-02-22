@@ -1,6 +1,3 @@
-from datetime import datetime
-from typing import Optional
-
 from pydantic import BaseModel
 
 from adagiovanni.models._mixin import CreatedUpdatedDatesModelMixin, IdModelMixin
@@ -13,7 +10,10 @@ class CustomerOrder(BaseModel):
 
 
 class OrderInDb(CreatedUpdatedDatesModelMixin, IdModelMixin, CustomerOrder):
-    in_progress: bool = False
+    # These fields will be useful for tracking progress of orders,
+    # but beyond the scope of the MVP
+    # in_progress: bool = False
+    # is_prepared: bool = False
+    # collection_time: Optional[datetime] = None
+
     is_complete: bool = False
-    collection_time: Optional[datetime] = None
-    expected_completion_time: Optional[datetime] = None

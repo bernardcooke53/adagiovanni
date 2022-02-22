@@ -9,7 +9,7 @@ from adagiovanni.core.config import API_V1_PREFIX
 log = logging.getLogger(__name__)
 
 
-def get_app() -> FastAPI:
+def app() -> FastAPI:
     app = FastAPI(
         title="Giovanni's Italian Caffe",
         docs_url=None,
@@ -18,6 +18,7 @@ def get_app() -> FastAPI:
     api.include_router(api_v1.home_router)
     api.include_router(api_v1.ping_router)
     api.include_router(api_v1.order_router)
+    api.include_router(api_v1.schedule_router)
 
     log.info("Application created successfully")
 
@@ -25,6 +26,3 @@ def get_app() -> FastAPI:
     api.add_event_handler("shutdown", db.disconnect)
     app.mount(API_V1_PREFIX, api)
     return app
-
-
-app = get_app()
