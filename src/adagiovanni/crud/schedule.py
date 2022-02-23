@@ -12,6 +12,9 @@ log = logging.getLogger(__name__)
 
 async def calculate_schedule(client: AsyncIOMotorClient) -> Schedule:
     schedule = Schedule(schedule=[])
+
+    # N.B. `order.is_complete` is always False as we don't update it anywhere -
+    # the MVP is just a projection of the upcoming schedule.
     orders_outstanding = await read_orders(
         client, filter={"is_complete": False}, sort="created_date"
     )
