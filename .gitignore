@@ -11,5 +11,7 @@
 pyvenv.cfg
 pip.*
 **/*.mypy_cache
+**/*.pytest_cache
 /flake8-error-log.txt
 *.log
+.env
