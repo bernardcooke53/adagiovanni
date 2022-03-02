@@ -1,11 +1,29 @@
 [tool.poetry]
 name = "adagiovanni"
-version = "0.1.0"
+version = "0.2.0"
 description = "A FastAPI backend for Giovanni to run his sandwich shop"
+license = "MIT"
 authors = ["Bernard Cooke <bernard-cooke@hotmail.com>"]
+readme = "README.md"
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Framework :: FastAPI",
+    "Framework :: Pytest",
+    "Intended Audience :: Education",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Education",
+    "Topic :: Internet :: WWW/HTTP :: WSGI :: Server",
+]
+
+[tool.poetry.urls]
+"Repository" = "https://github.com/bernardcooke53/adagiovanni"
+"Bug Tracker" = "https://github.com/bernardcooke53/adagiovanni"
+"Homepage" = "https://github.com/bernardcooke53/adagiovanni"
 
 [tool.poetry.scripts]
-serve = "start_server:serve"
+adagiovanni = "start_server:serve"
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -17,7 +35,7 @@ motor = "^2.5.1"
 pymongo = "^3.12.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^6.2"
 bandit = "^1.7.2"
 mypy = "0.931"
 black = "^22.1.0"
@@ -25,10 +43,41 @@ safety = "^1.10.3"
 flake8 = "^4.0.1"
 pynvim = "^0.4.3"
 types-PyYAML = "^6.0.4"
+python-semantic-release = "^7.25.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.semantic_release]
+version_variable = [
+    "src/adagiovanni/__init__.py:__version__",
+]
+version_toml = "pyproject.toml:tool.poetry.version"
+branch = "main"
+upload_to_pypi = false
+upload_to_repository = false
+upload_to_release = true
+build_command = "pip install poetry && poetry build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-ra", "--cache-clear"]
+python_files = ["*.py"]
+python_functions = ["test_*"]
+python_classes = ["Test*"]
+junit_logging = "all"
+junit_log_passing_tests = true
+junit_suite_name = "adagiovanni"
+log_cli = true
+log_cli_level = "WARNING"
+log_auto_indent = true
+log_date_format = "%Y-%m-%d %H:%M:%S"
+log_file = "pytest-log.log"
+log_file_level = "INFO"
+log_format = "[%(asctime)s] %(name)s %(levelname)s %(funcName)s: %(message)s"
+minversion = "6.2"
+
 
 [tool.isort]
 profile = "black"
@@ -43,9 +92,7 @@ targets = ["src"]
 
 [tool.pylint.messages_control]
 max-line-length = 120
-disable = [
-    "import-error",
-]
+disable = ["import-error"]
 
 
 [tool.mypy]
@@ -75,3 +122,9 @@ disallow_untyped_defs=true
 check_untyped_defs=true
 
 cache_dir="/dev/null"
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+allow_untyped_defs = true
+allow_incomplete_defs = true
+allow_untyped_calls = true

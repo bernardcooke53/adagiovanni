@@ -1,3 +1,9 @@
+# Copyright (c) 2022, Bernard Cooke
+# All rights reserved.
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE.md file in the root directory of this source tree.
+
 import os
 from urllib.parse import quote_plus
 
@@ -21,5 +27,4 @@ MONGO_URL = f"mongodb://{quote_plus(MONGO_USER)}:{quote_plus(MONGO_PASSWORD)}@{M
 MIN_MONGO_CONNECTION_POOL_SIZE = int(os.getenv("MIN_MONGO_CONNECTION_POOL_SIZE", 10))
 MAX_MONGO_CONNECTION_POOL_SIZE = int(os.getenv("MAX_MONGO_CONNECTION_POOL_SIZE", 10))
 MAX_DOCUMENT_FETCH_LIMIT = int(os.getenv("MAX_DOCUMENT_FETCH_LIMIT", 1000))
-# SANDWICH_COLLECTION_NAME = "sandwiches"
 ORDERS_COLLECTION_NAME = "orders"

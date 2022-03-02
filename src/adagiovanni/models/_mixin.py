@@ -1,3 +1,16 @@
+# Copyright (c) 2022, Bernard Cooke
+# All rights reserved.
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE.md file in the root directory of this source tree.
+
+"""
+mixins
+
+These models are mixins to be composed with other models,
+that allow common attributes to be added without re-implementing
+all the JSON serde & parsing associated.
+"""
 from __future__ import annotations
 
 from datetime import datetime
@@ -13,7 +26,9 @@ class PyObjectId(ObjectId):
     encoded unique identifier that isn't JSON serializable.
     This subclass is a wrapper which supplies the minimal
     interface for Pydantic to recognize it as a type and
-    represent it correctly in the OpenAPI documentation.
+    represent it correctly in the OpenAPI documentation, as
+    well as to convert it to the correct format to push back
+    to the database.
     """
 
     @classmethod
@@ -53,11 +68,22 @@ class CreatedUpdatedDatesModelMixin(BaseModel):
     """
     These are needed to ensure that we have JSON
     serializable representations of the date fields.
+
     Using this class as a mixin will add these to the
     subclassing model, which is more often than not
     going to be a useful addition to the documents we're
     creating and reading back.
+
+    Mongo seems to truncate to the millisecond, so by
+    truncating the dates in this model we eliminate some of
+    the headaches in checking the correctness of the data -
+    by storing it in Mongo we are only going to lose that
+    anyway.
     """
 
-    created_date: datetime = Field(default_factory=datetime.utcnow)
-    updated_date: datetime = Field(default_factory=datetime.utcnow)
+    created_date: datetime = Field(
+        default_factory=lambda: datetime.utcnow().replace(microsecond=0)
+    )
+    updated_date: datetime = Field(
+        default_factory=lambda: datetime.utcnow().replace(microsecond=0)
+    )

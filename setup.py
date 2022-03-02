@@ -1,55 +1,45 @@
-"""setup.py."""
+# Copyright (c) 2022, Bernard Cooke
+# All rights reserved.
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE.md file in the root directory of this source tree.
 
-import json
+"""
+setup.py
+
+This is mainly present to support legacy build-system interfaces
+such as direct build from source.
+"""
+
 import os
-import re
 
 import setuptools
-
-VERSION_SPECIFIER_RE = re.compile(
-    r"""
-    [a-zA-Z]*
-    (?P<major>\d+)
-    \.?
-    (?P<minor>(?<=\.)\d+)?
-    \.?
-    (?P<patch>(?<=\.)\d+)?
-    """,
-    flags=re.VERBOSE,
-)
+import toml
 
 THIS_DIR = os.path.abspath(os.path.dirname(__file__))
 os.chdir(THIS_DIR)
 
-with open("package.json", encoding="utf-8") as vfile, open(
-    "requirements.txt", encoding="utf-8"
-) as reqfile, open("README.md", encoding="utf-8") as readme:
-    requirements = reqfile.read()
+with open("pyproject.toml", encoding="utf-8") as project_file, open(
+    "README.md", encoding="utf-8"
+) as readme, open("requirements.txt", encoding="utf-8") as reqfile:
     long_description = readme.read()
-    vfilecontents = json.load(vfile)
-    version_str = vfilecontents["version"]
-    valid_version = VERSION_SPECIFIER_RE.match(version_str)
-    name = vfilecontents["name"]
-
-if not valid_version:
-    raise TypeError(f"Invalid version: {version_str}")
-version = ".".join(filter(None, valid_version.groups()))
+    requirements = reqfile.readlines()
+    project_info = toml.load(project_file)
+    project_metadata = project_info["tool"]["poetry"]
+    project_urls = project_metadata["urls"]
 
 
 if __name__ == "__main__":
     setuptools.setup(
-        name=name,
-        version=version,
-        author="Bernard Cooke",
-        description="<Add short description>",
+        name=project_metadata["name"],
+        version=project_metadata["version"],
+        author=project_metadata["authors"],
+        description=project_metadata["description"],
         long_description=long_description,
         long_description_content_type="text/markdown",
-        url="<Add project url>",
-        project_urls={},
-        classifiers=[
-            "Programming Language :: Python :: 3",
-            "Operating System :: OS Independent",
-        ],
+        url=project_urls["Homepage"],
+        project_urls=project_urls,
+        classifiers=project_metadata["classifiers"],
         packages=setuptools.find_packages(where="src", include=["*"]),
         package_dir={
             "": "src",

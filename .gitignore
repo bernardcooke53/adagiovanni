@@ -11,11 +11,7 @@
 pyvenv.cfg
 pip.*
 **/*.mypy_cache
+**/*.pytest_cache
 /flake8-error-log.txt
 *.log
-<<<<<<< Updated upstream
 .env
-=======
-mongodb_data/
-adagiovanni_appdata/
->>>>>>> Stashed changes

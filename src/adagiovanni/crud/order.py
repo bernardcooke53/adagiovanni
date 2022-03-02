@@ -1,21 +1,26 @@
-import logging
-from typing import Any, Dict, List, Optional
+# Copyright (c) 2022, Bernard Cooke
+# All rights reserved.
+#
+# This source code is licensed under the MIT license found in the
+# LICENSE.md file in the root directory of this source tree.
 
-from bson.objectid import ObjectId
-from motor.motor_asyncio import AsyncIOMotorClient
+import logging
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 from adagiovanni.core.config import (
     MAX_DOCUMENT_FETCH_LIMIT,
     MONGO_DB,
     ORDERS_COLLECTION_NAME,
 )
+from adagiovanni.db import Client
 from adagiovanni.models.order import CustomerOrder, OrderInDb
 
 log = logging.getLogger(__name__)
 
 
 async def read_orders(
-    client: AsyncIOMotorClient,
+    client: Client,
     *,
     filter: Optional[Dict[str, Any]] = None,
     length: Optional[int] = None,
@@ -32,13 +37,12 @@ async def read_orders(
     ]
 
 
-async def place_order(
-    client: AsyncIOMotorClient, customer_order: CustomerOrder
-) -> OrderInDb:
+async def place_order(client: Client, customer_order: CustomerOrder) -> OrderInDb:
     db = client[MONGO_DB]
+    now = datetime.utcnow().replace(microsecond=0)
     order = OrderInDb(**customer_order.dict())
+    order.created_date = now
+    order.updated_date = now
     doc = await db[ORDERS_COLLECTION_NAME].insert_one(order.dict())
     order.id = doc.inserted_id
-    order.created_date = ObjectId(order.id).generation_time
-    order.updated_date = ObjectId(order.id).generation_time
     return order

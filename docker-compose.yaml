@@ -9,23 +9,32 @@ services:
         ports:
             - 27017:27017
         volumes:
-            - ./mongodb_data:/data/db
+            - db:/data/db
         privileged: true
     web:
-        build: .
+        build:
+            context: .
+            args:
+                app_username: ${PROJECT_NAME}
+                app_groupname: ${PROJECT_NAME}
+        env_file: .env
+
+        environment:
+            # Override MONGO_HOST with the container IP
+            # on the network Docker creates.
+            MONGO_HOST: mongo
         command: |
             uvicorn adagiovanni.main:app
                 --workers 1
                 --host 0.0.0.0
                 --port 8000
-        # TODO: Why doesn't this work in the container?
-        # --log-config=logging_config.yaml
+                --factory
         volumes:
-            - ./adagiovanni_appdata/:/usr/app/data/
+            - appdata:/home/${PROJECT_NAME}/app/data/
         ports:
             - 8000:8000
         depends_on:
             - mongo
 volumes:
-    mongodb_data:
-    adagiovanni_appdata:
+    db:
+    appdata:

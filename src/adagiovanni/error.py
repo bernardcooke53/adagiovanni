@@ -1,2 +1,0 @@
-class InvalidOrder(Exception):
-    pass
