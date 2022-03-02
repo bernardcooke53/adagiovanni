@@ -14,7 +14,7 @@ all the JSON serde & parsing associated.
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Callable, Generator
+from typing import Any, Callable, Generator, Optional
 
 from bson import ObjectId
 from pydantic import BaseModel, Field
@@ -28,7 +28,9 @@ class PyObjectId(ObjectId):
     interface for Pydantic to recognize it as a type and
     represent it correctly in the OpenAPI documentation, as
     well as to convert it to the correct format to push back
-    to the database.
+    to the database. We take the "value" inside the
+    bson.ObjectId instance and represent it as a string,
+    but convert back to BSON if we need to query the database.
     """
 
     @classmethod
@@ -56,7 +58,7 @@ class IdModelMixin(BaseModel):
     the inheritance hierarchy and this will be set up for us.
     """
 
-    id: PyObjectId | None = Field(default_factory=PyObjectId, alias="_id")
+    id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias="_id")
 
     class Config:
         allow_population_by_field_name = True

@@ -63,7 +63,7 @@ def schedule_helper(
             )
         )
 
-    # Add break when orders complete
+    # Add breaktime when orders complete
     schedule_list.append(
         ScheduleItem(
             item_start_time=repr_seconds(

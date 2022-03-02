@@ -17,7 +17,7 @@ database, which the included docker compose file will create in a
 container.
 
 ## Why "adagiovanni"?
-An app for Giovanni, written on top of (FastAPI)[https://fastapi.tiangolo.com/] -
+An app for Giovanni, written on top of [FastAPI](https://fastapi.tiangolo.com/) -
 it rolls off of the tongue easier than "allegriovanni"!
 
 ## Application Requirements
@@ -29,18 +29,20 @@ Giovanni has sent us some notes in an email:
 The schedule must contain the sequence number, time, task, and recipient.
 For example, if Giovanni has three sandwich orders to prepare,
 the schedule should include information along these lines: 
-    1. 00:00 Make sandwich for Stavros
-    2. 02:30 Serve sandwich for Stavros
-    3. 03:30 Make sandwich for Anisa
-    4. 06:00 Serve sandwich for Anisa
-    5. 07:00 Make sandwich for Adeel
-    6. 09:30 Serve sandwich for Adeel
-    7. 10:30 Take a break. 
+
+1. 00:00 Make sandwich for Stavros
+2. 02:30 Serve sandwich for Stavros
+3. 03:30 Make sandwich for Anisa
+4. 06:00 Serve sandwich for Anisa
+5. 07:00 Make sandwich for Adeel
+6. 09:30 Serve sandwich for Adeel
+7. 10:30 Take a break. 
 
 ### Assumptions
 There is no UI currently required though this would help bring the product to life. The MVP is purely a
-backend REST API, and Giovanni is a capable enough user of `cURL` and Python's `requests` library to
-work with this in the initial phase.
+backend REST API, and Giovanni has picked up enough knowledge from the software developers that he serves
+coffee and lunch to to be an adept enough user of `cURL` and Python's `requests` library; this will allow
+him to work with this early demo.
 
 The MVP for the product needs to accept sandwich orders and list outstanding tasks for Giovanni.
 Another assumption is that Giovanni stocks certain ingredients for a fixed choice of sandwiches on the menu,
@@ -50,7 +52,7 @@ included, but that may need to be customised by Giovanni at a later date.
 The MVP doesn't include any scope for customization of sandwich orders.
 The MVP doesn't allow customers to edit or cancel their order after submission!
 The MVP makes Giovanni's schedule public - if Giovanni wants to put his schedule into an admin portal,
-this can be added in a later iteration.
+this can be added in later.
 
 Based on Giovanni's input, customers will place their order for pickup ASAP and the schedule will reflect
 the earliest time it can be served on a first-come, first-served basis. This means if Stavros places his order
@@ -63,7 +65,7 @@ integration!).
 
 ## Running the application
 If you are just interested in seeing the application working,
-you will need to install (Docker)[https://docs.docker.com/] and (`docker-compose`)[https://github.com/docker/compose].
+you will need to install [Docker](https://docs.docker.com/) and [`docker-compose`](https://github.com/docker/compose).
 This app has been developed and tested with:
 
 * Python 3.8.10
@@ -95,7 +97,7 @@ instructions, go to `http://localhost:8000/api/v1/docs`.
 You can visit `/orders` to get a list of the orders currently submitted,
 and `/schedule` to see Giovanni's schedule.
 
-Using a web client of your choice, you can send a POST request to `/orders`
+Using a client of your choice, you can send a POST request to `/orders`
 to submit a new order - the request body should identify you in the
 `customer_name` field, and the sandwich you'd like to order in the
 `/sandwich` field.
@@ -105,12 +107,12 @@ you shut down the application with
 ```bash
 docker compose down
 ```
-you can still restart at a later date, and the orders will be loaded.
-Since this application is just a demonstration, there is no delete
-functionality and the database is shared with the integration tests;
-however the data is stored in a docker volume called `adagiovanni_db`,
-so if you want to reset the demo application, you can find the volume
-in your list of Docker volumes with
+you can still restart at a later date, and the orders will be loaded back
+into the application. Since this application is just a demonstration,
+there is no delete functionality and the database is shared with the
+integration tests; however the data is stored in a docker volume called
+`adagiovanni_db`, so if you want to reset the demo application, you can
+find the volume in your list of Docker volumes with
 ```bash
 docker volume ls
 ```
@@ -120,7 +122,7 @@ docker volume rm adagiovanni_db
 ```
 
 ## Running tests
-Testing is run via (pytest)[https://docs.pytest.org/en/7.0.x/],
+Testing is run via [pytest](https://docs.pytest.org/en/7.0.x/),
 which you can install via pip. It's recommended if you do this
 outside of a virtual environment to install using the provided
 `dev-requirements.txt` file as a constraint; this way your version
@@ -149,7 +151,7 @@ You can run all of the tests at once with
 pytest
 ```
 
-Alternatively, if you are using (poetry)[https://python-poetry.org/], then you can simply run
+Alternatively, if you are using [poetry](https://python-poetry.org/), then you can simply run
 ```bash
 poetry run pytest
 ```
@@ -195,13 +197,13 @@ python3 start_server.py
 
 If you are using poetry, you can run
 ```bash
-poetry install --dev --no-root
+poetry install --no-root
 ```
 to install all development dependencies, and
 ```bash
 poetry run adagiovanni
 ```
-to start a development server.
+to start the application on a development server.
 
 ## Appendix: Installing poetry
 On Debian/Ubuntu, this also requires `python3-venv` e.g.
@@ -212,4 +214,10 @@ sudo apt install python3.8-venv
 Run the following command to install poetry:
 ```bash
 curl -sSL https://install.python-poetry.org | python3 -
+```
+You will then need to tell poetry that this is a project
+which it should manage by running the following command
+from the root of the repository:
+```bash
+poetry init
 ```
