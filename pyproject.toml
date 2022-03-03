@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "adagiovanni"
-version = "0.2.1"
+version = "0.2.2"
 description = "A FastAPI backend for Giovanni to run his sandwich shop"
 license = "MIT"
 authors = ["Bernard Cooke <bernard-cooke@hotmail.com>"]
