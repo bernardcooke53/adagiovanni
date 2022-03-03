@@ -73,6 +73,10 @@ This app has been developed and tested with:
 * docker-compose v2.2.3
 * Ubuntu 20.04 (LTS)
 
+You will also need to create your own `.env` file - you can
+do this by copying the provided `.env.example` and changing the
+credential values there as appropriate.
+
 On Debian/Ubuntu, you can run
 ```bash
 sudo apt install docker
